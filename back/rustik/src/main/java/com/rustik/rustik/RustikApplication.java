@@ -10,20 +10,26 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class RustikApplication {
 
 	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.load();
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-		System.setProperty("DB_URL", dotenv.get("DB_URL"));
-		System.setProperty("CLOUDINARY_URL", dotenv.get("CLOUDINARY_URL"));
-		System.setProperty("CORS", dotenv.get("CORS"));
-		System.setProperty("SECRET", dotenv.get("SECRET"));
-		System.setProperty("ISSUER", dotenv.get("ISSUER"));
-		System.setProperty("SPRING_MAIL_USERNAME", dotenv.get("MAIL_USERNAME"));
-		System.setProperty("SPRING_MAIL_PASSWORD", dotenv.get("MAIL_PASSWORD"));
-		System.setProperty("RUSTIK_URL", dotenv.get("RUSTIK_URL"));
+		Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+		setEnvProperty(dotenv, "DB_USERNAME", "DB_USERNAME");
+        setEnvProperty(dotenv, "DB_PASSWORD", "DB_PASSWORD");
+        setEnvProperty(dotenv, "DB_URL", "DB_URL");
+        setEnvProperty(dotenv, "CLOUDINARY_URL", "CLOUDINARY_URL");
+        setEnvProperty(dotenv, "CORS", "CORS");
+        setEnvProperty(dotenv, "SECRET", "SECRET");
+        setEnvProperty(dotenv, "ISSUER", "ISSUER");
+        setEnvProperty(dotenv, "SPRING_MAIL_USERNAME", "MAIL_USERNAME");
+        setEnvProperty(dotenv, "SPRING_MAIL_PASSWORD", "MAIL_PASSWORD");
+        setEnvProperty(dotenv, "RUSTIK_URL", "RUSTIK_URL");
 
 		SpringApplication.run(RustikApplication.class, args);
 
 	}
 
+	private static void setEnvProperty(Dotenv dotenv, String propertyName, String envKey) {
+        String value = dotenv.get(envKey);
+        if (value != null) {
+            System.setProperty(propertyName, value);
+        }
+    }
 }
